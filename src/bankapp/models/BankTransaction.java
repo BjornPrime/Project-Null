@@ -1,5 +1,7 @@
 package bankapp.models;
 
+import java.math.BigDecimal;
+
 public class BankTransaction {
 	private int transactionID;
 	private String transactionType;
@@ -7,7 +9,7 @@ public class BankTransaction {
 	private int toAccountID;
 	private int fromUserID;
 	private int fromAccountID;
-	private int amount;
+	private BigDecimal amount;
 	
 	public BankTransaction(int transactionID, String transactionType, int toID, int fromID, int amount) {
 		this.transactionID = transactionID;
@@ -69,7 +71,7 @@ public class BankTransaction {
 
 
 
-	public void setAmount(int amount) {
+	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
 
@@ -99,17 +101,18 @@ public class BankTransaction {
 		return fromAccountID;
 	}
 
-	public int getAmount() {
+	public BigDecimal getAmount() {
 		return amount;
 	}
 	
-	
+
+
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + amount;
+		result = prime * result + ((amount == null) ? 0 : amount.hashCode());
 		result = prime * result + fromAccountID;
 		result = prime * result + fromUserID;
 		result = prime * result + toAccountID;
@@ -130,7 +133,10 @@ public class BankTransaction {
 		if (getClass() != obj.getClass())
 			return false;
 		BankTransaction other = (BankTransaction) obj;
-		if (amount != other.amount)
+		if (amount == null) {
+			if (other.amount != null)
+				return false;
+		} else if (!amount.equals(other.amount))
 			return false;
 		if (fromAccountID != other.fromAccountID)
 			return false;
@@ -149,6 +155,7 @@ public class BankTransaction {
 			return false;
 		return true;
 	}
+
 
 
 	@Override

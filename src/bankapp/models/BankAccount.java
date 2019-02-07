@@ -1,5 +1,6 @@
 package bankapp.models;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
@@ -12,7 +13,7 @@ public class BankAccount {
 	private String accountType;
 //	private String currency = "USD";
 	private List<Integer> transactionHistory;
-	private int balance;
+	private BigDecimal balance;
 	private Set<Integer> users = new HashSet<>();
 	private String accountStatus = "Open";
 	
@@ -22,14 +23,14 @@ public class BankAccount {
 		try {
 			if(accountInfo.next()) {
 				this.accountType = accountInfo.getString("account_type");
-				this.balance = accountInfo.getInt("balance");
+				this.balance = accountInfo.getBigDecimal("balance");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public BankAccount(int accountID, String accountType, int balance,
+	public BankAccount(int accountID, String accountType, BigDecimal balance,
 			Set<Integer> users) {
 		super();
 		this.accountID = accountID;
@@ -48,6 +49,8 @@ public class BankAccount {
 				+ transactionHistory + ", balance=" + balance + ", users=" + users + ", accountStatus=" + accountStatus
 				+ "]";
 	}
+	
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -55,11 +58,12 @@ public class BankAccount {
 		result = prime * result + accountID;
 		result = prime * result + ((accountStatus == null) ? 0 : accountStatus.hashCode());
 		result = prime * result + ((accountType == null) ? 0 : accountType.hashCode());
-		result = prime * result + balance;
+		result = prime * result + ((balance == null) ? 0 : balance.hashCode());
 		result = prime * result + ((transactionHistory == null) ? 0 : transactionHistory.hashCode());
 		result = prime * result + ((users == null) ? 0 : users.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -81,7 +85,10 @@ public class BankAccount {
 				return false;
 		} else if (!accountType.equals(other.accountType))
 			return false;
-		if (balance != other.balance)
+		if (balance == null) {
+			if (other.balance != null)
+				return false;
+		} else if (!balance.equals(other.balance))
 			return false;
 		if (transactionHistory == null) {
 			if (other.transactionHistory != null)
@@ -95,6 +102,7 @@ public class BankAccount {
 			return false;
 		return true;
 	}
+
 	public int getAccountID() {
 		return accountID;
 	}
@@ -119,10 +127,10 @@ public class BankAccount {
 	public void setTransactionHistory(List<Integer> transactionHistory) {
 		this.transactionHistory = transactionHistory;
 	}
-	public int getBalance() {
+	public BigDecimal getBalance() {
 		return balance;
 	}
-	public void setBalance(int balance) {
+	public void setBalance(BigDecimal balance) {
 		this.balance = balance;
 	}
 	public Set<Integer> getUserList() {

@@ -1,5 +1,6 @@
 package bankapp.util;
 
+import java.math.BigDecimal;
 import java.util.Scanner;
 
 public class UserInput {
@@ -43,6 +44,29 @@ public class UserInput {
 				System.out.println("Content not found. Please enter again.");
 			}
 		}
+	}
+	
+	public static BigDecimal moneyInput() {
+		
+		BigDecimal input = null;
+		
+		 do {
+			 while(!scanner.hasNextBigDecimal()) {
+				 scanner.nextLine();
+				 System.out.println("Please enter a valid amount in USD");
+			 }
+			 input = scanner.nextBigDecimal();
+			 scanner.nextLine();
+			 
+			 if(input.compareTo(new BigDecimal(0)) >= 0) {
+				 return input;
+			 } else {
+				 System.out.println("Please enter a positive amount of money");
+			 }
+		 } while (input.compareTo(new BigDecimal(0)) < 0);
+		 
+		 return input;
+		
 	}
 	
 }

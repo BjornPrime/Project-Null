@@ -1,5 +1,6 @@
 package bankapp.services;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -53,12 +54,12 @@ public class UserService {
 		
 		System.out.println("Please enter either (1) for checking account or (0) for savings account:");
 		newAccount.setAccountType(UserInput.integerInput(1) == 1 ? "Checking" : "Savings");
-		System.out.println("Initial Deposit Value (in cents):");
-		newAccount.setBalance(UserInput.integerInput(1000000000));
+		System.out.println("Initial Deposit Value (in USD):");
+		newAccount.setBalance(UserInput.moneyInput());
 		newAccount.addToUserList(owner.getUserID());
 		
 		newAccount = accountDao.insertAccount(newAccount, owner);
-		System.out.println("New Account Created: " + newAccount);
+		System.out.println("New Account Created");
 		return newAccount;
 	}
 
@@ -103,8 +104,8 @@ public class UserService {
 			BankAccount item = AccountDao.retrieveAccount(account);
 			int a = item.getAccountID();
 			String b = item.getAccountType();
-			int c = item.getBalance();
-			System.out.println("Account #" + a + " | " + b + " | Current Balance: $" + (c / 100) + "." + (c % 100));
+			BigDecimal c = item.getBalance();
+			System.out.println("Account #" + a + " | " + b + " | Current Balance: $" + c);
 		}
 	}
 	
@@ -148,8 +149,8 @@ public class UserService {
 			}
 			newTransaction.setToAccountID(depositAccount);
 			System.out.println("Account #" + depositAccount + " selected");
-			System.out.println("Amount to deposit (in cents):");
-			newTransaction.setAmount(UserInput.integerInput(1000000000));
+			System.out.println("Amount to deposit (in USD):");
+			newTransaction.setAmount(UserInput.moneyInput());
 			AccountDao.creditAccount(newTransaction.getToAccountID(), newTransaction.getAmount());
 			System.out.println("Transaction successful");
 			break;
@@ -162,9 +163,9 @@ public class UserService {
 			}
 			newTransaction.setFromAccountID(withdrawalAccount);
 			System.out.println("Account #" + withdrawalAccount + " selected");
-			System.out.println("Amount to withdraw (in cents):");
-			newTransaction.setAmount(UserInput.integerInput(1000000000));
-			if(!AccountDao.creditAccount(newTransaction.getFromAccountID(), -1*newTransaction.getAmount())) {
+			System.out.println("Amount to withdraw (in USD):");
+			newTransaction.setAmount(UserInput.moneyInput());
+			if(!AccountDao.creditAccount(newTransaction.getFromAccountID(), newTransaction.getAmount().multiply(new BigDecimal(-1)))) {
 				System.out.println("Transaction cancelled! Insufficient funds!");
 			} else {
 				System.out.println("Transaction successful");
@@ -187,8 +188,8 @@ public class UserService {
 				break;
 			}
 			System.out.println("Transfer how much from account #" + fromAccount + " to account #" + toAccount + "?");
-			newTransaction.setAmount(UserInput.integerInput(1000000000));
-			if(AccountDao.creditAccount(newTransaction.getFromAccountID(), -1*newTransaction.getAmount())) {
+			newTransaction.setAmount(UserInput.moneyInput());
+			if(AccountDao.creditAccount(newTransaction.getFromAccountID(), newTransaction.getAmount().multiply(new BigDecimal(-1)))) {
 				AccountDao.creditAccount(newTransaction.getToAccountID(), newTransaction.getAmount());
 				System.out.println("Transaction successful");
 			} else {

@@ -1,5 +1,6 @@
 package bankapp.daos;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,7 +23,7 @@ public class AccountDao {
 			PreparedStatement statement = conn.prepareStatement(query);
 			
 			statement.setString(1, account.getAccountType());
-			statement.setInt(2, account.getBalance());
+			statement.setBigDecimal(2, account.getBalance());
 			
 			ResultSet resultSet = statement.executeQuery();
 			
@@ -67,15 +68,15 @@ public class AccountDao {
 		return account;
 	}
 	
-	public static boolean creditAccount(int accountID, int amount) {
+	public static boolean creditAccount(int accountID, BigDecimal amount) {
 //		Connection conn = DatabaseConnect.getConnection();
 		BankAccount account = retrieveAccount(accountID);
 
-		int balance = account.getBalance();
+		BigDecimal balance = account.getBalance();
 		
-		if((amount + balance) >= 0) {
+		if((amount.add(balance)).compareTo(new BigDecimal(0)) >= 0) {
 			try {
-				String query = "UPDATE bank_accounts " + "SET balance = " + (balance + amount) + " " + "WHERE ? = id RETURNING balance";
+				String query = "UPDATE bank_accounts " + "SET balance = " + (balance.add(amount)) + " " + "WHERE ? = id RETURNING balance";
 				PreparedStatement statement = conn.prepareStatement(query);
 				
 				statement.setInt(1, accountID);
