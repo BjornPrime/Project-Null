@@ -59,6 +59,7 @@ public class AccountDao {
 			
 			ResultSet accountInfo = statement.executeQuery();
 			account = new BankAccount(accountID, accountInfo);
+//			System.out.println(account);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

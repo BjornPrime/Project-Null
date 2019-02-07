@@ -112,7 +112,7 @@ public class UserService {
 		System.out.println("Add user to which account #?");
 		Integer account = UserInput.integerInput(100);
 		while(!owner.getAccounts().contains(account)) {
-			System.out.println("Invalid account # entered");
+			System.out.println("Invalid account # entered. Please enter the # of one of your accounts.");
 			account = UserInput.integerInput(100);
 		}
 		System.out.println("Please enter the email of the user you wish to add to the account:");
@@ -143,7 +143,7 @@ public class UserService {
 			System.out.println("Deposit to which account #?");
 			Integer depositAccount = UserInput.integerInput(100);//This block could be its own input function
 			while(!user.getAccounts().contains(depositAccount)) {
-				System.out.println("Invalid account # entered");
+				System.out.println("Invalid account # entered. Please enter the # of one of your accounts.");
 				depositAccount = UserInput.integerInput(100);
 			}
 			newTransaction.setToAccountID(depositAccount);
@@ -157,7 +157,7 @@ public class UserService {
 			System.out.println("Withdraw from which account #?");
 			Integer withdrawalAccount = UserInput.integerInput(100);
 			while(!user.getAccounts().contains(withdrawalAccount)) {
-				System.out.println("Invalid account # entered");
+				System.out.println("Invalid account # entered. Please enter the # of one of your accounts.");
 				withdrawalAccount = UserInput.integerInput(100);
 			}
 			newTransaction.setFromAccountID(withdrawalAccount);
@@ -174,7 +174,7 @@ public class UserService {
 			System.out.println("Transfer from which account #?");
 			Integer fromAccount = UserInput.integerInput(100);
 			while(!user.getAccounts().contains(fromAccount)) {
-				System.out.println("Invalid account # entered");
+				System.out.println("Invalid account # entered. Please enter the # of one of your accounts.");
 				fromAccount = UserInput.integerInput(100);
 			}
 			newTransaction.setFromAccountID(fromAccount);
@@ -182,6 +182,10 @@ public class UserService {
 			System.out.println("Transfer to which account #?");
 			Integer toAccount = UserInput.integerInput(100);
 			newTransaction.setToAccountID(toAccount);
+			if(AccountDao.retrieveAccount(newTransaction.getToAccountID()).getAccountType() == null) {
+				System.out.println("Receiving account not found. Transaction cancelled!");
+				break;
+			}
 			System.out.println("Transfer how much from account #" + fromAccount + " to account #" + toAccount + "?");
 			newTransaction.setAmount(UserInput.integerInput(1000000000));
 			if(AccountDao.creditAccount(newTransaction.getFromAccountID(), -1*newTransaction.getAmount())) {

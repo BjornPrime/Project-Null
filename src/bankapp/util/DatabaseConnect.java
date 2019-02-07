@@ -23,21 +23,21 @@ public class DatabaseConnect {
 		return conn;
 	}
 	
-	public static ResultSet preparedQuery(String queryStatement, String[] inputs) {
-		Connection conn = DatabaseConnect.getConnection();
-		
-		try {
-			String query = queryStatement;
-			PreparedStatement statement = conn.prepareStatement(query);
-			
-			for (int i = 0; i < inputs.length; i++) {
-				statement.setString(i+1, inputs[i]);
-			}
-			
-			return statement.executeQuery();
-		} catch(SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+//	public static ResultSet preparedQuery(String queryStatement, String[] inputs) {
+//		Connection conn = DatabaseConnect.getConnection();
+//		
+//		try {
+//			String query = queryStatement;
+//			PreparedStatement statement = conn.prepareStatement(query);
+//			
+//			for (int i = 0; i < inputs.length; i++) {
+//				statement.setString(i+1, inputs[i]);
+//			}
+//			
+//			return statement.executeQuery();
+//		} catch(SQLException e) {
+//			e.printStackTrace();
+//		}
+//		return null;
+//	}
 }
