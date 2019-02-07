@@ -42,7 +42,7 @@ public class UserService {
 		}
 		
 		newUser = userDao.insertUser(newUser); //why can't this just be static?
-		System.out.println("New User created successfully: " + newUser);
+		System.out.println("New User created successfully");
 		return newUser;
 	}
 	
@@ -95,16 +95,9 @@ public class UserService {
 		}
 		
 		return userID;
-//		int x = (int) Math.round(2*Math.random()-1);
-//		System.out.println(x);
-//		return x;
 	}
 	
 	public static void printAccounts(BankUser user) {
-//		Set<Integer> accounts = user.getAccounts();
-//		for(Integer accountID:accounts) {
-//			
-//		}
 		Iterable<Integer> accounts = user.getAccounts();
 		for(Integer account: accounts) {
 			BankAccount item = AccountDao.retrieveAccount(account);

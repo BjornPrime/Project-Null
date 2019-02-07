@@ -9,7 +9,7 @@ public class MainView implements View {
 	
 	@Override
 	public void showMenu() {
-		System.out.println("Welcome to BjornBank!");
+		System.out.println("Welcome to the First Bank of Springfield!");
 		System.out.println("What would you like to do?");
 		System.out.println("1 - Log In");
 		System.out.println("2 - New User Account");
