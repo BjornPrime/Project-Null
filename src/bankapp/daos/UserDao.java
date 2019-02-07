@@ -12,14 +12,16 @@ import bankapp.models.BankUser;
 import bankapp.util.DatabaseConnect;
 
 public class UserDao {
+	
+	//Connection AccountDao.conn = DatabaseConnect.getConnection();
 
 	public BankUser insertUser(BankUser bankUser) {
 		
 //		Class.forName("bankapp.daos.jdbc.Driver");
 		
-		try(Connection conn = DatabaseConnect.getConnection()) {
+		try {
 			String query = "INSERT INTO bank_users (first_name, last_name, email, password) " + "VALUES (?, ?, ?, ?) RETURNING id";
-			PreparedStatement statement = conn.prepareStatement(query);
+			PreparedStatement statement = AccountDao.conn.prepareStatement(query);
 			
 			statement.setString(1, bankUser.getFirstName());
 			statement.setString(2, bankUser.getLastName());
@@ -47,11 +49,11 @@ public class UserDao {
 //		input[0] = Integer.toString(userID);
 //		ResultSet userInfo = DatabaseConnect.preparedQuery("SELECT * FROM bank_users WHERE ? = id", input);
 		//start
-		Connection conn = DatabaseConnect.getConnection();
+//		Connection conn = DatabaseConnect.getConnection();
 		
 		try {
 			String query = "SELECT * FROM bank_users WHERE ? = id";
-			PreparedStatement statement = conn.prepareStatement(query);
+			PreparedStatement statement = AccountDao.conn.prepareStatement(query);
 			
 			statement.setInt(1, userID);
 			
@@ -60,7 +62,7 @@ public class UserDao {
 			//add users accounts or make accounts separate? How to deal with no accounts?
 			
 			query = "SELECT account_id FROM account_user_junctions WHERE ? = user_id"; //find user accounts
-			statement = conn.prepareStatement(query);
+			statement = AccountDao.conn.prepareStatement(query);
 			statement.setInt(1, userID);
 			ResultSet userAccounts = statement.executeQuery();
 			

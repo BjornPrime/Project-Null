@@ -10,10 +10,12 @@ import bankapp.models.BankUser;
 import bankapp.util.DatabaseConnect;
 
 public class AccountDao {
+	
+	public static Connection conn = DatabaseConnect.getConnection();
 
 	public BankAccount insertAccount(BankAccount account, BankUser owner) {
 		
-		Connection conn = DatabaseConnect.getConnection();
+//		Connection conn = DatabaseConnect.getConnection();
 		
 		try {
 			String query = "INSERT INTO bank_accounts (account_type, balance) " + "VALUES(?, ?) RETURNING id";
@@ -47,7 +49,7 @@ public class AccountDao {
 	public static BankAccount retrieveAccount(int accountID) {
 		BankAccount account = null;
 		
-		Connection conn = DatabaseConnect.getConnection();
+//		Connection conn = DatabaseConnect.getConnection();
 		
 		try {
 			String query = "SELECT * FROM bank_accounts WHERE ? = id";
@@ -65,7 +67,7 @@ public class AccountDao {
 	}
 	
 	public static boolean creditAccount(int accountID, int amount) {
-		Connection conn = DatabaseConnect.getConnection();
+//		Connection conn = DatabaseConnect.getConnection();
 		BankAccount account = retrieveAccount(accountID);
 
 		int balance = account.getBalance();
@@ -88,7 +90,7 @@ public class AccountDao {
 	}
 	
 	public static void addAccountUser(int accountID, String email) {
-		Connection conn = DatabaseConnect.getConnection();
+//		Connection conn = DatabaseConnect.getConnection();
 		int userID;
 		
 		try {
